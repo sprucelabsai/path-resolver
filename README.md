@@ -1,5 +1,25 @@
-# Test
+# @sprucelabs/path-resolver
 
-Testing made 🔥🔥🔥 in the Spruce Experience Platform.
+Add node runtime support for the `compilerOptions.paths` of your `tsconfig.json`.
 
-Documentation available at: [developer.spruce.ai](https://developer.spruce.ai/#/tests/index)
+### Example tsconfig.json
+
+```json
+{
+	"compilerOptions": {
+		"baseUrl": "",
+		"outDir": "build",
+		"paths": {
+			"#alias": ["new/path/relative/to/baseUrl"],
+			"#aliasWithWildcard/*": ["new/path/one/*", "new/path/two/*"]
+		}
+	}
+}
+```
+
+### Example import
+
+```js
+import MyThing from "#alias";
+import { somethingElse } from "#aliasWithWildcard/path/passed/through";
+```
