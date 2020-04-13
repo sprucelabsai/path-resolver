@@ -101,13 +101,15 @@ export default class PathResolver {
 					)
 
 					// Try relative to output dir
-					candidates.push(
-						path.join(
-							this.cwd,
-							this.compilerOptions.outDir,
-							request.replace(regex, candidatePath)
+					if (typeof this.compilerOptions.outDir === 'string') {
+						candidates.push(
+							path.join(
+								this.cwd,
+								this.compilerOptions.outDir,
+								request.replace(regex, candidatePath)
+							)
 						)
-					)
+					}
 
 					// Does this candidate exist? if so, mutate the request so core loads it correctly
 					foundMatch = true
