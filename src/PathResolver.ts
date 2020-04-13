@@ -7,7 +7,7 @@ export interface IPathResolverOptions {
 	/** Where are we currently? tsconfig.compilerOptions.baseUrl is joined to cwd */
 	cwd: string
 	/** Supported file extensions, defaults to everything setup in node */
-	extensions: string[]
+	extensions?: string[]
 }
 
 /** Enable paths support from compiler options of the tsconfig */
