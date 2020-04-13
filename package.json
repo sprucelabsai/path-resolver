@@ -1,0 +1,47 @@
+{
+	"name": "@sprucelabs/path-resolver",
+	"publishConfig": {
+		"access": "public"
+	},
+	"files": [
+		"build"
+	],
+	"version": "1.0.3",
+	"main": "./build/index.js",
+	"types": "./build/index.d.ts",
+	"description": "Enables support for paths in the compiler options of your tsconfig file.",
+	"keywords": [
+		"node",
+		"tsconfig",
+		"paths",
+		"sprucebot",
+		"sprucelabs"
+	],
+	"homepage": "https://github.com/sprucelabsai/spruce-test",
+	"bugs": {
+		"url": "https://github.com/sprucelabsai/spruce-test/issues"
+	},
+	"scripts": {
+		"build": "npm run clean && tsc",
+		"watch": "chokidar 'index.ts' 'src/**/*.(js|jsx|ts|tsx)' -c 'npm run build'",
+		"clean": "rm -rf build/",
+		"lint": "eslint '**/*.ts' && tsc -p . --noEmit",
+		"lint:fix": "eslint --fix '**/*.ts'",
+		"release": "semantic-release",
+		"local": "node --inspect=5200 ./build/index.js"
+	},
+	"devDependencies": {
+		"@sprucelabs/semantic-release": "^3.0.4",
+		"ava": "^3.6.0",
+		"chokidar-cli": "^2.1.0",
+		"concurrently": "^5.0.2",
+		"eslint": "^5",
+		"eslint-config-spruce": "^10.1.0",
+		"faker": "^4.1.0",
+		"prettier": "^1.19",
+		"ts-node": "^8.8.1",
+		"typescript": "^3.8"
+	},
+	"peerDependencies": {},
+	"dependencies": {}
+}
