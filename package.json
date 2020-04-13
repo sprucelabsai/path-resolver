@@ -43,5 +43,7 @@
 		"typescript": "^3.8"
 	},
 	"peerDependencies": {},
-	"dependencies": {}
+	"dependencies": {
+		"@sprucelabs/log": "^10.2.0"
+	}
 }

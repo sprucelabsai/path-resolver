@@ -1,6 +1,6 @@
 # @sprucelabs/path-resolver
 
-Add node runtime support for the `compilerOptions.paths` of your `tsconfig.json`.
+Add runtime support for the `compilerOptions.paths` of your `tsconfig.json`.
 
 ### Example tsconfig.json
 
