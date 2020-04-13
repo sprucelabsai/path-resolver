@@ -28,7 +28,8 @@
 		"lint": "eslint '**/*.ts' && tsc -p . --noEmit",
 		"lint:fix": "eslint --fix '**/*.ts'",
 		"release": "semantic-release",
-		"local": "node --inspect=5200 ./build/index.js"
+		"local": "node --inspect=5200 ./build/index.js",
+		"test": "echo \"TODO: Add tests\""
 	},
 	"devDependencies": {
 		"@sprucelabs/semantic-release": "^3.0.4",
