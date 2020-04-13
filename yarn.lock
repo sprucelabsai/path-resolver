@@ -347,7 +347,7 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
-"@sprucelabs/log@^10.2.0":
+"@sprucelabs/log@^10.2.1":
   version "10.2.1"
   resolved "https://registry.yarnpkg.com/@sprucelabs/log/-/log-10.2.1.tgz#acd368915e5d763ec4588165e8ccc69db6ed8c42"
   integrity sha512-hJA7RfEudH+jpMCeR/MYjS3/YVK0ZYa6CmkJIxlYalM2DtWl5M//4uuE+JqYDa1q84QE/gwiZlDR1DvSBx12xA==
