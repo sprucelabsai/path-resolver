@@ -2,6 +2,26 @@
 
 Add runtime support for the `compilerOptions.paths` of your `tsconfig.json`.
 
+## Installation
+
+```bash
+yarn install @sprucelabs/path-resolver
+```
+
+or
+
+```bash
+npm install @sprucelabs/path-resolver
+```
+
+And include this as the first line of your app:
+
+```js
+import "@sprucelabs/path-resolver";
+```
+
+That's all!
+
 ### Example tsconfig.json
 
 ```json
