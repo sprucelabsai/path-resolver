@@ -16,6 +16,7 @@ export default class PathResolver {
 	public replacePaths: Record<string, string[]> = {}
 	public pathCache: Record<string, string> = {}
 	public cwd: string
+	public baseDir: string
 	public extensions: string[] = []
 
 	public constructor(options: IPathResolverOptions) {
@@ -34,7 +35,7 @@ export default class PathResolver {
 		}
 
 		// We have to set these to at least something or ts will not pass lint
-		this.cwd = cwd || (process && process.cwd()) || '/'
+		this.cwd = this.baseDir = cwd || (process && process.cwd()) || '/'
 		this.compilerOptions = {}
 
 		log.info('PathResolver setup for', this.extensions)
@@ -44,10 +45,16 @@ export default class PathResolver {
 			pathParts[0] = path.sep
 		}
 		do {
-			const tsConfigPath = path.join(...pathParts, 'tsconfig.json')
+			const dir = path.join(...pathParts)
+			const tsConfigPath = path.join(dir, 'tsconfig.json')
 			if (fs.existsSync(tsConfigPath)) {
 				log.info(`Loading tsconfig from ${tsConfigPath}`)
 				this.compilerOptions = require(tsConfigPath).compilerOptions
+				this.baseDir =
+					this.compilerOptions.baseUrl &&
+					this.compilerOptions.baseUrl[0] === path.sep
+						? this.compilerOptions.baseUrl
+						: path.join(dir, this.compilerOptions.baseUrl ?? '.')
 				found = true
 				break
 			}
@@ -111,7 +118,7 @@ export default class PathResolver {
 					if (typeof this.compilerOptions.outDir === 'string') {
 						candidates.push(
 							path.join(
-								this.cwd,
+								this.baseDir,
 								this.compilerOptions.outDir,
 								request.replace(regex, candidatePath)
 							)
@@ -120,7 +127,7 @@ export default class PathResolver {
 
 					// Try relative to cwd
 					candidates.push(
-						path.join(this.cwd, request.replace(regex, candidatePath))
+						path.join(this.baseDir, request.replace(regex, candidatePath))
 					)
 
 					// Does this candidate exist? if so, mutate the request so core loads it correctly
@@ -145,7 +152,7 @@ export default class PathResolver {
 		// If we found a match on paths, but the file did not exist
 		if (foundMatch) {
 			log.crit(
-				`Found a match for ${request} but no existing candidate: ${attemptedPaths.join(
+				`Found a match for ${request} but no candidates found: \n\n ${attemptedPaths.join(
 					'\n'
 				)}`
 			)
