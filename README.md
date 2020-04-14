@@ -14,13 +14,19 @@ or
 npm install @sprucelabs/path-resolver
 ```
 
-And include this as the first line of your app:
+And include this as the first 2 lines of your app:
 
 ```js
-import "@sprucelabs/path-resolver";
+import { register } from "@sprucelabs/path-resolver";
+register({ tsConfigDir: __dirname });
 ```
 
 That's all!
+
+### Options
+
+- `tsConfigDir:string` - The path to the directory containing your tsconfig
+- `extensions:string[]` - Extensions you want to load, defaults to Module.extensions
 
 ### Example tsconfig.json
 

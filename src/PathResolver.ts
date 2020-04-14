@@ -5,7 +5,7 @@ import log from './lib/log'
 
 export interface IPathResolverOptions {
 	/** Where are we currently? tsconfig.compilerOptions.baseUrl is joined to cwd */
-	cwd: string
+	tsConfigDir: string
 	/** Supported file extensions, defaults to everything setup in node */
 	extensions?: string[]
 }
@@ -20,7 +20,7 @@ export default class PathResolver {
 
 	public constructor(options: IPathResolverOptions) {
 		const {
-			cwd,
+			tsConfigDir,
 			// @ts-ignore
 			extensions = Object.keys(coreModuleLoader._extensions)
 		} = options
@@ -35,17 +35,17 @@ export default class PathResolver {
 
 		log.info('PathResolver setup for', this.extensions)
 
-		log.info(`Loading tsconfig from ${cwd}/tsconfig.json`)
-		this.compilerOptions = require(`${cwd}/tsconfig.json`).compilerOptions
+		log.info(`Loading tsconfig from ${tsConfigDir}/tsconfig.json`)
+		this.compilerOptions = require(`${tsConfigDir}/tsconfig.json`).compilerOptions
 
 		// Set to base url
 		this.cwd =
 			this.compilerOptions.baseUrl &&
 			this.compilerOptions.baseUrl[0] === path.sep
 				? this.compilerOptions.baseUrl
-				: path.join(cwd, this.compilerOptions.baseUrl ?? '.')
+				: path.join(tsConfigDir, this.compilerOptions.baseUrl ?? '.')
 
-		log.info('Setting cwd to', cwd)
+		log.info('Setting resolver cwd to', tsConfigDir)
 
 		// Setup all replace paths based on compiler options
 		Object.keys(this.compilerOptions.paths).forEach(alias => {
