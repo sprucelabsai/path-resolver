@@ -4,8 +4,8 @@ import fs from 'fs'
 import log from './lib/log'
 
 export interface IPathResolverOptions {
-	/** Where are we currently? tsconfig.compilerOptions.baseUrl is joined to cwd */
-	tsConfigDir: string
+	/** Paths to find tsConfig. First one wins */
+	tsConfigDirs: string[]
 	/** Supported file extensions, defaults to everything setup in node */
 	extensions?: string[]
 }
@@ -20,7 +20,7 @@ export default class PathResolver {
 
 	public constructor(options: IPathResolverOptions) {
 		const {
-			tsConfigDir,
+			tsConfigDirs,
 			// @ts-ignore
 			extensions = Object.keys(coreModuleLoader._extensions)
 		} = options
@@ -33,20 +33,37 @@ export default class PathResolver {
 			throw new Error('Your extensions must start with a dot')
 		}
 
+		// We have to set these to at least something or ts will not pass lint
+		this.cwd = ''
+		this.compilerOptions = {}
+
 		log.info('PathResolver setup for', this.extensions)
+		let found = false
 
-		log.info(`Loading tsconfig from ${tsConfigDir}/tsconfig.json`)
-		this.compilerOptions = require(`${tsConfigDir}/tsconfig.json`).compilerOptions
+		for (const candidate of tsConfigDirs) {
+			const tsConfigPath = path.join(candidate, 'tsconfig.json')
+			if (fs.existsSync(tsConfigPath)) {
+				log.info(`Loading tsconfig from ${candidate}/tsconfig.json`)
+				this.compilerOptions = require(`${candidate}/tsconfig.json`).compilerOptions
 
-		// Set to base url
-		this.cwd =
-			this.compilerOptions.baseUrl &&
-			this.compilerOptions.baseUrl[0] === path.sep
-				? this.compilerOptions.baseUrl
-				: path.join(tsConfigDir, this.compilerOptions.baseUrl ?? '.')
+				// Set to base url
+				this.cwd =
+					this.compilerOptions.baseUrl &&
+					this.compilerOptions.baseUrl[0] === path.sep
+						? this.compilerOptions.baseUrl
+						: path.join(candidate, this.compilerOptions.baseUrl ?? '.')
 
-		log.info('Setting resolver cwd to', tsConfigDir)
+				log.info('Setting resolver cwd to', this.cwd)
+				found = true
+				break
+			}
+		}
 
+		if (!found) {
+			throw new Error(
+				`Could not found ts config in:\n\n ${tsConfigDirs.join('\n')}`
+			)
+		}
 		// Setup all replace paths based on compiler options
 		Object.keys(this.compilerOptions.paths).forEach(alias => {
 			this.replacePaths[

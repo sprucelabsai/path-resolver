@@ -18,15 +18,15 @@ And include this as the first 2 lines of your app:
 
 ```js
 import { register } from "@sprucelabs/path-resolver";
-register({ tsConfigDir: __dirname });
+register({ tsConfigDirs: [__dirname] });
 ```
 
 That's all!
 
 ### Options
 
-- `tsConfigDir:string` - The path to the directory containing your tsconfig
-- `extensions:string[]` - Extensions you want to load, defaults to Module.extensions
+- `tsConfigDirs:string[]` - The path to the directory containing your tsconfig, will try them each in order (helpful when building to a dir that changes relative to the tsconfig)
+- `extensions:string[]` - Extensions you want to load, defaults to Module.extensions, must have dot in them `.js`, `.ts`.
 
 ### Example tsconfig.json
 
@@ -46,6 +46,10 @@ That's all!
 ### Example import
 
 ```js
+import path from "path";
+import { register } from "@sprucelabs/path-resolver";
+register({ tsConfigDirs: [path.join(__dirname, "..")] });
+
 import MyThing from "#alias";
 import { somethingElse } from "#aliasWithWildcard/path/passed/through";
 ```
