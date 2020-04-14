@@ -107,11 +107,6 @@ export default class PathResolver {
 				for (const candidatePath of this.replacePaths[pattern]) {
 					const candidates = []
 
-					// Try relative to cwd
-					candidates.push(
-						path.join(this.cwd, request.replace(regex, candidatePath))
-					)
-
 					// Try relative to output dir
 					if (typeof this.compilerOptions.outDir === 'string') {
 						candidates.push(
@@ -122,6 +117,11 @@ export default class PathResolver {
 							)
 						)
 					}
+
+					// Try relative to cwd
+					candidates.push(
+						path.join(this.cwd, request.replace(regex, candidatePath))
+					)
 
 					// Does this candidate exist? if so, mutate the request so core loads it correctly
 					foundMatch = true
