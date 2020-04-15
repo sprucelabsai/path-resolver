@@ -1,3 +1,5 @@
+## [1.0.10](https://github.com/sprucelabsai/path-resolver/compare/v1.0.9...v1.0.10) (2020-04-14)
+
 ## [1.0.9](https://github.com/sprucelabsai/path-resolver/compare/v1.0.8...v1.0.9) (2020-04-14)
 
 ## [1.0.8](https://github.com/sprucelabsai/path-resolver/compare/v1.0.7...v1.0.8) (2020-04-14)
