@@ -17,6 +17,6 @@
 		"baseUrl": ".",
 		"experimentalDecorators": true
 	},
-	"include": ["./*.ts", "./**/*.ts"],
+	"include": ["./*.ts", "./**/*.ts", "register/index.js"],
 	"exclude": ["**/node_modules/*", "build/*"]
 }
