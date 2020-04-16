@@ -4,7 +4,8 @@
 		"access": "public"
 	},
 	"files": [
-		"build"
+		"build",
+		"register"
 	],
 	"version": "1.0.12",
 	"main": "./build/index.js",
