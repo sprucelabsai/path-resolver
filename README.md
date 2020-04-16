@@ -14,18 +14,17 @@ or
 npm install @sprucelabs/path-resolver
 ```
 
-And include this as the first 2 lines of your app:
+And include this line at the top of your app:
 
 ```js
-import { register } from "@sprucelabs/path-resolver";
-register({ tsConfigDirs: [__dirname] });
+import "@sprucelabs/path-resolver/register";
 ```
 
 That's all!
 
 ### Options
 
-- `tsConfigDirs:string[]` - The path to the directory containing your tsconfig, will try them each in order (helpful when building to a dir that changes relative to the tsconfig)
+- `cwd:string` - Where to start looking for your tsconfig.json. Will look up one directory at a time until it finds one or throws an Error. _NOTE:_ Make sure your tsconfig.json is being bundled with your project when building/deploying.
 - `extensions:string[]` - Extensions you want to load, defaults to Module.extensions, must have dot in them `.js`, `.ts`.
 
 ### Example tsconfig.json
@@ -47,9 +46,14 @@ That's all!
 
 ```js
 import path from "path";
-import { register } from "@sprucelabs/path-resolver";
-register({ tsConfigDirs: [path.join(__dirname, "..")] });
+import "@sprucelabs/path-resolver/register";
 
 import MyThing from "#alias";
 import { somethingElse } from "#aliasWithWildcard/path/passed/through";
 ```
+
+## Why not use [tspaths-config](https://github.com/dividab/tsconfig-paths#readme)?
+
+This module works almost exactly the same, but when resolving modules it checks the `outDir` first, then falls back to checking the local directory. It also checks for all file extensions.
+
+In other words, `path-resolver` works with `ts-node` and without and with built projects and without, all with one line of code.
