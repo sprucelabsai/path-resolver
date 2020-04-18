@@ -1,0 +1,11 @@
+{
+	"description": "this is for testing only",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"outDir": "build",
+		"paths": {
+			"#test/*": ["*"],
+			"#test:modules/*": ["build/node_modules/*"]
+		}
+	}
+}
