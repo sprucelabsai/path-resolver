@@ -49,59 +49,9 @@ export default class PathResolver {
 		this.compilerOptions = {}
 
 		log.info('PathResolver setup for', this.extensions)
-		let found = false
 
-		// Track where we are looking for the tsconfig
-		const tsConfigLookupPaths: string[] = []
-
-		const pathParts = this.cwd.split(path.sep)
-		if (pathParts[0] === '') {
-			pathParts[0] = path.sep
-		}
-		do {
-			const dir = path.join(...pathParts)
-			const tsConfigPath = path.join(dir, 'tsconfig.json')
-
-			// Track everywhere i look
-			tsConfigLookupPaths.push(tsConfigPath)
-
-			if (fs.existsSync(tsConfigPath)) {
-				log.info(`Loading tsconfig from ${tsConfigPath}`)
-				this.compilerOptions = require(tsConfigPath).compilerOptions
-				if (!this.compilerOptions) {
-					throw new SpruceError({
-						code: ErrorCode.InvalidTsConfig,
-						tsConfigPath,
-						friendlyMessage: 'compilerOptions are missing'
-					})
-				}
-				this.baseDir =
-					this.compilerOptions.baseUrl &&
-					this.compilerOptions.baseUrl[0] === path.sep
-						? this.compilerOptions.baseUrl
-						: path.join(dir, this.compilerOptions.baseUrl ?? '.')
-				found = true
-				break
-			}
-			pathParts.pop()
-		} while (pathParts.length > 0 && !found)
-
-		if (!found) {
-			throw new SpruceError({
-				code: ErrorCode.TsConfigNotFound,
-				cwd: this.cwd,
-				tsLookupPaths: tsConfigLookupPaths
-			})
-		}
-
-		// Setup all replace paths based on compiler options
-		Object.keys(this.compilerOptions.paths).forEach(alias => {
-			this.replacePaths[
-				alias.replace(/\*.?/, '(.*)')
-			] = this.compilerOptions.paths[alias].map((destination: string) =>
-				destination.replace(/\*.?/, '$1')
-			)
-		})
+		const configDir = PathResolver.resolveTsConfigDir(this.cwd)
+		this.refreshCompilerOptions(configDir)
 
 		log.info('Paths set as', this.replacePaths)
 
@@ -119,6 +69,66 @@ export default class PathResolver {
 
 	public static setInstance(resolver: PathResolver) {
 		PathResolver.instance = resolver
+	}
+
+	/** Based on the cwd, find the directory containing the tsconfig */
+	public static resolveTsConfigDir(cwd: string) {
+		// Track where we are looking for the tsconfig
+		const tsConfigLookupPaths: string[] = []
+		const found = false
+
+		const pathParts = cwd.split(path.sep)
+		if (pathParts[0] === '') {
+			pathParts[0] = path.sep
+		}
+
+		do {
+			const dir = path.join(...pathParts)
+			const tsConfigPath = path.join(dir, 'tsconfig.json')
+
+			// Track everywhere i look
+			tsConfigLookupPaths.push(tsConfigPath)
+
+			if (fs.existsSync(tsConfigPath)) {
+				return dir
+			}
+			pathParts.pop()
+		} while (pathParts.length > 0 && !found)
+
+		throw new SpruceError({
+			code: ErrorCode.TsConfigNotFound,
+			cwd,
+			tsLookupPaths: tsConfigLookupPaths
+		})
+	}
+
+	/** Refresh compiler options by sending the dir that contains the tsconfig.json (use response of PathResolver.resolveTsConfigDir) */
+	public refreshCompilerOptions(tsConfigDir: string) {
+		const tsConfigPath = path.join(tsConfigDir, 'tsconfig.json')
+		log.info(`Loading tsconfig from ${tsConfigPath}`)
+		const compilerOptions = require(tsConfigPath).compilerOptions
+		if (!compilerOptions) {
+			throw new SpruceError({
+				code: ErrorCode.InvalidTsConfig,
+				tsConfigPath,
+				friendlyMessage: 'compilerOptions are missing'
+			})
+		}
+		this.compilerOptions = compilerOptions
+		this.baseDir =
+			this.compilerOptions.baseUrl &&
+			this.compilerOptions.baseUrl[0] === path.sep
+				? this.compilerOptions.baseUrl
+				: path.join(this.baseDir, this.compilerOptions.baseUrl ?? '.')
+
+		// Setup all replace paths based on compiler options
+		Object.keys(this.compilerOptions.paths).forEach(alias => {
+			this.replacePaths[
+				alias.replace(/\*.?/, '(.*)')
+			] = this.compilerOptions.paths[alias].map((destination: string) =>
+				destination.replace(/\*.?/, '$1')
+			)
+		})
 	}
 
 	/** Enable this loader */
