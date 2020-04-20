@@ -16,6 +16,8 @@ export interface IPathResolverOptions {
 
 /** Enable paths support from compiler options of the tsconfig */
 export default class PathResolver {
+	protected static instance: PathResolver | undefined
+
 	public compilerOptions: Record<string, any>
 	public replacePaths: Record<string, string[]> = {}
 	public pathCache: Record<string, string> = {}
@@ -40,12 +42,6 @@ export default class PathResolver {
 				code: ErrorCode.InvalidParameters,
 				friendlyMessage: 'Extensions need to start with a dot.'
 			})
-		}
-
-		// Do we already have an instance running?
-		// @ts-ignore
-		if (coreModuleLoader._originalResolveFilename) {
-			throw new SpruceError({ code: ErrorCode.AlreadyRunning })
 		}
 
 		// We have to set these to at least something or ts will not pass lint
@@ -114,7 +110,25 @@ export default class PathResolver {
 		}
 	}
 
+	public static getInstance(options?: IPathResolverOptions): PathResolver {
+		if (!PathResolver.instance) {
+			PathResolver.instance = new PathResolver(options || {})
+		}
+		return PathResolver.instance
+	}
+
+	public static setInstance(resolver: PathResolver) {
+		PathResolver.instance = resolver
+	}
+
+	/** Enable this loader */
 	public enable() {
+		// Do we already have an instance running?
+		// @ts-ignore
+		if (coreModuleLoader._originalResolveFilename) {
+			throw new SpruceError({ code: ErrorCode.AlreadyRunning })
+		}
+
 		// Store original resolveFilename from core module loader to be called after the we do the mapping below
 		//@ts-ignore
 		coreModuleLoader._originalResolveFilename =
@@ -134,6 +148,7 @@ export default class PathResolver {
 		}
 	}
 
+	/** Put things back how they are supposed to be */
 	public disable() {
 		// @ts-ignore
 		coreModuleLoader._resolveFilename =
@@ -141,6 +156,9 @@ export default class PathResolver {
 			coreModuleLoader._originalResolveFilename ||
 			// @ts-ignore
 			coreModuleLoader._resolveFilename
+
+		// @ts-ignore
+		coreModuleLoader._originalResolveFilename = false
 	}
 
 	/** Pass a path and i'll lookup places to find it based on your tsconfig */
