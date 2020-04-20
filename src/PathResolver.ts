@@ -168,19 +168,36 @@ export default class PathResolver {
 					if (isNodeModule) {
 						// Get everything to the right of node_modules
 						let moduleName = name.split('node_modules').pop()
-						if (moduleName) {
+						const localPath =
+							name === path.join('node_modules', moduleName || 'missing')
+								? '.'
+								: name.split('node_modules').shift()
+
+						if (moduleName && localPath) {
 							if (moduleName[0] === path.sep) {
 								moduleName = moduleName.substr(1)
 							}
-							if (moduleName) {
+							if (moduleName && localPath) {
+								const matchedName = moduleName
 								// Attach it to EVERY path node is going to look
-								// https://nodejs.org/api/modules.html#modules_require_resolve_paths_request
 								// @ts-ignore
-								const paths: string[] = require.resolve.paths(moduleName)
-								const name = moduleName
-								paths.forEach(item => {
-									candidates.push(path.join(item, name))
-								})
+								const paths: string[] = coreModuleLoader.globalPaths
+								paths.forEach(item =>
+									candidates.push(path.join(item, matchedName))
+								)
+
+								// Also look ALL the way up the directory tree
+								const fullPath = path.join(this.baseDir, localPath)
+								const fullPathParts = fullPath.split(path.sep)
+								do {
+									const testPath = path.join(
+										fullPathParts.join(path.sep) || path.sep,
+										'node_modules',
+										moduleName
+									)
+									candidates.push(testPath)
+									fullPathParts.pop()
+								} while (fullPathParts.length > 0)
 							}
 						}
 					} else {

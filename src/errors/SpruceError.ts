@@ -19,6 +19,11 @@ export default class SpruceError extends BaseSpruceError<ErrorOptions> {
 				message =
 					'You can only have 1 PathParser running at a time. You can instantiate a new PathParser with {enable:false} if you wish.'
 				break
+			case ErrorCode.CouldNotFindFile:
+				message = `Could not find ${
+					options.request
+				}. Tried: \n\n${options.candidates.join('\n')}`
+				break
 			default:
 				message = super.friendlyMessage()
 		}

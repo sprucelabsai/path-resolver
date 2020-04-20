@@ -97,17 +97,17 @@ export default class PathResolverTest extends BaseTest {
 				t.is(request, '#test:modules/never/match')
 
 				// 1. is it checking this dir's node_modules?
-				const first = candidates[0]
+				const homedir = require('os').homedir()
 				const firstMatch = path.join(
-					__dirname,
-					'node_modules',
+					homedir,
+					'.node_modules',
 					'never',
 					'match.txt'
 				)
-				t.is(firstMatch, first, 'did not look in __dirname')
+
+				t.not(candidates.indexOf(firstMatch), -1, 'did not look in home dir')
 
 				//2. it should be checking 1 dir up
-				const second = candidates[1]
 				const secondMatch = path.join(
 					__dirname,
 					'..',
@@ -115,10 +115,10 @@ export default class PathResolverTest extends BaseTest {
 					'never',
 					'match.txt'
 				)
-				t.is(
-					secondMatch,
-					second,
-					'did not look in node modules of this project'
+				t.not(
+					candidates.indexOf(secondMatch),
+					-1,
+					'did not look node_modules of this project'
 				)
 
 				//3. it should be checking the most root'est
@@ -133,17 +133,6 @@ export default class PathResolverTest extends BaseTest {
 					-1,
 					'did not look node_modules at root'
 				)
-
-				//4. last check, should be looking in home
-				const homedir = require('os').homedir()
-				const fourthMatch = path.join(
-					homedir,
-					'node_modules',
-					'never',
-					'match.txt'
-				)
-
-				t.not(candidates.indexOf(fourthMatch), -1, 'did not look in home dir')
 			}
 		} else {
 			t.log(error)
