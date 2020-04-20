@@ -5,6 +5,7 @@ node_modules/
 coverage/
 __TEST__/
 build/
+!_test/build
 
 # Logs
 *.log
