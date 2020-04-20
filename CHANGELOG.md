@@ -1,3 +1,18 @@
+# [1.1.0](https://github.com/sprucelabsai/path-resolver/compare/v1.0.13...v1.1.0) (2020-04-20)
+
+
+### Bug Fixes
+
+* better check up directory tree ([09ad77c](https://github.com/sprucelabsai/path-resolver/commit/09ad77c))
+* better singleton accessors ([80488dc](https://github.com/sprucelabsai/path-resolver/commit/80488dc))
+
+
+### Features
+
+* include test files ([bd18fa1](https://github.com/sprucelabsai/path-resolver/commit/bd18fa1))
+* seperate out loading and parsing from constructor ([eb4c3c8](https://github.com/sprucelabsai/path-resolver/commit/eb4c3c8))
+* use module.resolve.paths() to lookup node modules ([9876ad7](https://github.com/sprucelabsai/path-resolver/commit/9876ad7))
+
 ## [1.0.13](https://github.com/sprucelabsai/path-resolver/compare/v1.0.12...v1.0.13) (2020-04-16)
 
 
