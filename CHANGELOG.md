@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/sprucelabsai/path-resolver/compare/v1.1.0...v1.2.0) (2020-04-20)
+
+
+### Features
+
+* additional tsconfig path resolving tests ([b5f6df3](https://github.com/sprucelabsai/path-resolver/commit/b5f6df3))
+
 # [1.1.0](https://github.com/sprucelabsai/path-resolver/compare/v1.0.13...v1.1.0) (2020-04-20)
 
 
