@@ -78,6 +78,15 @@ export default class PathResolverTest extends BaseTest {
 		t.is(match.substr(-expectedEndsWith.length, match.length), expectedEndsWith)
 	}
 
+	@test('Works up the directory tree to find the tsconfig')
+	protected static async findTsConfigDir(t: ExecutionContext<IContext>) {
+		const startPath = path.join(__dirname, '..', '_test', 'build')
+		const tsConfigDir = PathResolver.resolveTsConfigDir(startPath)
+		const expected = path.join(__dirname, '..', '_test')
+
+		t.is(tsConfigDir, expected, 'Did not correctly resolve the tsconfig path')
+	}
+
 	@test('Test node_modules resolution')
 	protected static async testNodeModuleResolution(
 		t: ExecutionContext<IContext>

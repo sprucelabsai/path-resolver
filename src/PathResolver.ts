@@ -49,7 +49,6 @@ export default class PathResolver {
 		this.compilerOptions = {}
 
 		log.info('PathResolver setup for', this.extensions)
-
 		const configDir = PathResolver.resolveTsConfigDir(this.cwd)
 		this.refreshCompilerOptions(configDir)
 
@@ -76,7 +75,6 @@ export default class PathResolver {
 		// Track where we are looking for the tsconfig
 		const tsConfigLookupPaths: string[] = []
 		const found = false
-
 		const pathParts = cwd.split(path.sep)
 		if (pathParts[0] === '') {
 			pathParts[0] = path.sep
@@ -119,7 +117,7 @@ export default class PathResolver {
 			this.compilerOptions.baseUrl &&
 			this.compilerOptions.baseUrl[0] === path.sep
 				? this.compilerOptions.baseUrl
-				: path.join(this.baseDir, this.compilerOptions.baseUrl ?? '.')
+				: path.join(tsConfigDir, this.compilerOptions.baseUrl ?? '.')
 
 		// Setup all replace paths based on compiler options
 		Object.keys(this.compilerOptions.paths).forEach(alias => {
@@ -168,7 +166,7 @@ export default class PathResolver {
 			coreModuleLoader._resolveFilename
 
 		// @ts-ignore
-		coreModuleLoader._originalResolveFilename = false
+		delete coreModuleLoader._originalResolveFilename
 	}
 
 	/** Pass a path and i'll lookup places to find it based on your tsconfig */
