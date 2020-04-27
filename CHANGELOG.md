@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/sprucelabsai/path-resolver/compare/v1.2.1...v1.3.0) (2020-04-27)
+
+
+### Features
+
+* put singleton on coremodule ([d42c427](https://github.com/sprucelabsai/path-resolver/commit/d42c427))
+
 ## [1.2.1](https://github.com/sprucelabsai/path-resolver/compare/v1.2.0...v1.2.1) (2020-04-21)
 
 
