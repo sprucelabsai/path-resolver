@@ -16,8 +16,6 @@ export interface IPathResolverOptions {
 
 /** Enable paths support from compiler options of the tsconfig */
 export default class PathResolver {
-	protected static instance: PathResolver | undefined
-
 	public compilerOptions: Record<string, any>
 	public replacePaths: Record<string, string[]> = {}
 	public pathCache: Record<string, string> = {}
@@ -60,14 +58,18 @@ export default class PathResolver {
 	}
 
 	public static getInstance(options?: IPathResolverOptions): PathResolver {
-		if (!PathResolver.instance) {
-			PathResolver.instance = new PathResolver(options || {})
+		// @ts-ignore
+		if (!coreModuleLoader._sprucePathResolver) {
+			// @ts-ignore
+			coreModuleLoader._sprucePathResolver = new PathResolver(options || {})
 		}
-		return PathResolver.instance
+		// @ts-ignore
+		return coreModuleLoader._sprucePathResolver
 	}
 
 	public static setInstance(resolver: PathResolver) {
-		PathResolver.instance = resolver
+		// @ts-ignore
+		coreModuleLoader._sprucePathResolver = resolver
 	}
 
 	/** Based on the cwd, find the directory containing the tsconfig */
