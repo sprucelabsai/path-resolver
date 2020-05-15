@@ -246,13 +246,30 @@ export default class PathResolver {
 
 					// Attempt all candidates against all file extensions
 					for (const candidate of candidates) {
+						let pathIsDirectory = false
+						try {
+							pathIsDirectory = fs.lstatSync(candidate).isDirectory()
+						} catch (e) {
+							log.trace(e)
+						}
+
 						for (const ext of this.extensions) {
 							const fullPath = candidate + ext
-							attemptedPaths.push(fullPath)
-							if (fs.existsSync(fullPath)) {
-								log.info(`${request} mapped to -> ${fullPath}`)
-								this.pathCache[request] = fullPath
-								return fullPath
+							const pathsToAttempt = [fullPath]
+
+							// Check for index file if it's a path
+							if (pathIsDirectory) {
+								pathsToAttempt.push(path.join(candidate, `index${ext}`))
+							}
+
+							for (let i = 0; i < pathsToAttempt.length; i += 1) {
+								const pathToAttempt = pathsToAttempt[i]
+								attemptedPaths.push(pathToAttempt)
+								if (fs.existsSync(pathToAttempt)) {
+									log.info(`${request} mapped to -> ${pathToAttempt}`)
+									this.pathCache[request] = pathToAttempt
+									return pathToAttempt
+								}
 							}
 						}
 					}
