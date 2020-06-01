@@ -178,6 +178,13 @@ export default class PathResolver {
 			return this.pathCache[request]
 		}
 
+		// Check if it's a core node module
+		// Is it a core node module?
+		const coreModule = coreModuleLoader.builtinModules.find(m => m === request)
+		if (coreModule) {
+			return request
+		}
+
 		let foundMatch = false
 		const attemptedPaths: string[] = []
 		const pathPatterns = Object.keys(this.replacePaths)
