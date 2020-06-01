@@ -148,4 +148,32 @@ export default class PathResolverTest extends BaseTest {
 			t.fail('Got the wrong type of error back')
 		}
 	}
+
+	@test('Test core module resolution')
+	protected static async testCoreModuleResolution(
+		t: ExecutionContext<IContext>
+	) {
+		const resolver = new PathResolver({
+			enable: false,
+			cwd: path.join(__dirname, '..', '_test'),
+			extensions: ['.txt']
+		})
+
+		t.is(resolver.resolvePath('vm'), 'vm')
+	}
+
+	@test('Test absolute path resolution')
+	protected static async testAbsolutePathResolution(
+		t: ExecutionContext<IContext>
+	) {
+		const expected = path.resolve(__dirname, '..', '_test', 'pathTest.ts')
+
+		const resolver = new PathResolver({
+			enable: false,
+			cwd: path.join(__dirname, '..', 'register'),
+			extensions: ['.ts']
+		})
+
+		t.is(resolver.resolvePath(expected), expected)
+	}
 }
