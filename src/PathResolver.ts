@@ -1,9 +1,9 @@
 import coreModuleLoader = require('module')
 import path = require('path')
 import fs from 'fs'
-import log from './lib/log'
-import SpruceError from './errors/SpruceError'
 import { ErrorCode } from './errors/error.types'
+import SpruceError from './errors/SpruceError'
+import log from './lib/log'
 
 export interface IPathResolverOptions {
 	/** Current working directory, i'll start here and work up directories until i find a tsconfig.json */

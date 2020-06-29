@@ -1,10 +1,10 @@
 import coreModuleLoader = require('module')
+import path from 'path'
 import BaseTest, { ISpruce, test } from '@sprucelabs/test'
 import { ExecutionContext } from 'ava'
 import PathResolver from '.'
-import path from 'path'
-import SpruceError from './errors/SpruceError'
 import { ErrorCode } from './errors/error.types'
+import SpruceError from './errors/SpruceError'
 import { IPathResolverOptions } from './PathResolver'
 
 /** Context just for this test */
