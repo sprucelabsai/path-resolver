@@ -27,15 +27,18 @@
 		"watch": "chokidar 'index.ts' 'src/**/*.(js|jsx|ts|tsx)' -c 'npm run build'",
 		"clean": "rm -rf build/",
 		"lint": "eslint '**/*.ts' && tsc -p . --noEmit",
-		"lint:fix": "eslint --fix '**/*.ts'",
+		"lint.fix": "eslint --fix '**/*.ts'",
 		"release": "semantic-release",
 		"local": "node --inspect=5200 ./build/index.js",
 		"test": "ava **/*.test.ts",
-		"test:watch": "ava  **/*.test.ts --watch"
+		"test.watch": "ava  **/*.test.ts --watch",
+		"arkit": "arkit -f src/index.ts -o docs/images/arkit.svg",
+		"arkit.png": "arkit -f src/index.ts -o docs/images/arkit.png"
 	},
 	"devDependencies": {
 		"@sprucelabs/semantic-release": "^3.0.4",
 		"@sprucelabs/test": "^1.1.0",
+		"arkit": "^1.6.4",
 		"ava": "^3.7.0",
 		"chokidar-cli": "^2.1.0",
 		"concurrently": "^5.0.2",
@@ -48,8 +51,8 @@
 	},
 	"peerDependencies": {},
 	"dependencies": {
-		"@sprucelabs/log": "^10.2.1",
-		"@sprucelabs/error": "^1.0.11"
+		"@sprucelabs/error": "^1.0.11",
+		"@sprucelabs/log": "^10.2.1"
 	},
 	"ava": {
 		"extensions": [
