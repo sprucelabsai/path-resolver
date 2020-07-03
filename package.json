@@ -36,7 +36,7 @@
 		"arkit.png": "arkit -f src/index.ts -o docs/images/arkit.png"
 	},
 	"devDependencies": {
-		"@sprucelabs/semantic-release": "^3.0.4",
+		"@sprucelabs/semantic-release": "^4.0.4",
 		"@sprucelabs/test": "^1.1.0",
 		"arkit": "^1.6.4",
 		"ava": "^3.7.0",
